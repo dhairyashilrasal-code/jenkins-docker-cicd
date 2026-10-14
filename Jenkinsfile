@@ -12,11 +12,8 @@ pipeline {
             steps {
                 sh '''
                     set -e
-
-                    python3 --version
-                    python3 -m venv .venv
-                    .venv/bin/python -m pip install --upgrade pip
-                    .venv/bin/python -m pip install -r app/requirements.txt
+                    python3 -m pip install --user --upgrade pip
+                    python3 -m pip install --user -r app/requirements.txt
                 '''
             }
         }
@@ -25,7 +22,7 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    .venv/bin/python -m pytest -v tests/
+                    python3 -m pytest -v tests/
                 '''
             }
         }
@@ -42,9 +39,8 @@ pipeline {
 
     post {
         success {
-            echo 'Checkout, dependency installation, automated tests, and Docker image build completed successfully.'
+            echo 'Checkout, automated tests, and Docker image build completed successfully.'
         }
-
         failure {
             echo 'Pipeline failed. Check the stage logs for details.'
         }
